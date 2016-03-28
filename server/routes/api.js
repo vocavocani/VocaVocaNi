@@ -6,9 +6,7 @@ var userCtrl = require('../controllers/userCtrl');
 
 exports.initApp = function(app){
     // TEST
-    app.route('/')
-      .get(testCtrl.test);
-    app.route('/data')
+    app.route('/api/data')
       .get(testCtrl.data);
 
     // RESTful data api

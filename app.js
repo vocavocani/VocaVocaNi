@@ -4,21 +4,8 @@ var favicon = require('serve-favicon');
 var logger = require('morgan');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
-// webpack setting
-var webpack = require('webpack');
-var webpackConfig = require('./webpack.config');
-var compiler = webpack(webpackConfig);
 
 var app = express();
-
-// webpack compile
-app.use(require('webpack-dev-middleware')(compiler, {
-  noInfo: true,
-  publicPath: webpackConfig.output.path
-}));
-
-// initialize routes
-require('./server/routes/api').initApp(app);
 
 // view engine setup
 app.set('views', path.join(__dirname, 'client'));
@@ -32,6 +19,14 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));  // assets
 app.use(express.static(path.join(__dirname, 'build')));  // webpack build .js file
+
+// initialize routes
+app.use((req, res, next) => {
+  req.path.indexOf('api') != -1 ?
+    next() :
+    res.render("index");
+});
+require('./server/routes/api').initApp(app);
 
 // Server Port Set
 var http = require('http');

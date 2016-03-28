@@ -5,11 +5,6 @@
 /*******************
  *  TEST
  ********************/
-exports.test = function(req, res){
-  res.render('index');
-};
-
-
 exports.data = function(req, res){
   res.json({
     "data":

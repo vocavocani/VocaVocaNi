@@ -7,13 +7,15 @@
  ********************/
 
 exports.login = function(req, res){
+  console.log(req.body);
   if(req.body.id == "aa" && req.body.pw == "1234"){
     res.json({
-      "status": "success"
+      "status": 1,
+      "username": req.body.id
     });
   }else{
     res.json({
-      "status": "false"
+      "status": 0
     })
   }
 };
