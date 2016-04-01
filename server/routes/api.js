@@ -9,7 +9,12 @@ exports.initApp = function(app){
     app.route('/api/data')
       .get(testCtrl.data);
 
-    // RESTful data api
+    /************
+     * REST data api
+     ************/
+        // User
     app.route('/api/login')
       .post(userCtrl.login);
+    app.route('/api/register')
+      .post(userCtrl.register);
 };

@@ -4,7 +4,7 @@
 
 import React from 'react';
 
-class Page extends React.Component {
+class App extends React.Component {
   render(){
     return (
       <div id="container">
@@ -14,4 +14,4 @@ class Page extends React.Component {
   }
 }
 
-export default Page
+export default App;

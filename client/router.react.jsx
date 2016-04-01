@@ -4,19 +4,23 @@ import ReactDom from 'react-dom';
 import { Router, Route, IndexRoute, browserHistory } from 'react-router';
 // Redux
 import { Provider } from 'react-redux';
-import {store} from './store/store'
+import configureStore from './store/configureStore'
+// Containers
+import App from './containers/App.react';
+import Register from './containers/user/Register.react';
+import Login from './containers/user/Login.react';
 
-import Page from './containers/page/Page.react.js';
-import LoginPage from './containers/page/login/loginPage.react';
+
+const store = configureStore();
 
 
 ReactDom.render(
   <Provider store={store}>
     <Router history={browserHistory}>
-      <Route path="/" component={Page}>
-        <IndexRoute component={LoginPage}>
-          <Route path="/login" component={LoginPage} />
-        </IndexRoute>
+      <Route path="/" component={App}>
+        <IndexRoute component={Register} />
+        <Route path="/register" component={Register} />
+        <Route path="/login" component={Login} />
       </Route>
     </Router>
   </Provider>,
