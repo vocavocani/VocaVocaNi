@@ -7,6 +7,7 @@ import {
   REGISTER_FAILED, REGISTER_SUCCESS,
   LOGIN_REQEUST, LOGIN_FAILED, LOGIN_SUCCESS
 } from '../constants/ActionTypes';
+import { browserHistory } from 'react-router'
 
 
 /*******************
@@ -41,8 +42,10 @@ export function register(reg_data){
     }).then(parseJSON)
       .then((data) => {
         if(data.status == 1){
+          browserHistory.push('/login');
           dispatch(registerSuccess());
         } else {
+          console.log("Register form failed", data.error);
           dispatch(registerFailed(data.error))
         }
       })
