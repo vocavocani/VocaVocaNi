@@ -1,0 +1,22 @@
+{
+  "name": "WordStudy",
+  "description": "",
+  "main": "",
+  "authors": [
+    "Nayak <wjdduq914@gmail.com>"
+  ],
+  "license": "MIT",
+  "moduleType": [],
+  "homepage": "",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "jquery": "^2.2.2",
+    "bootstrap": "^3.3.6"
+  }
+}
