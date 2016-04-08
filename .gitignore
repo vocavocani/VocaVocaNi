@@ -1,6 +1,5 @@
 .idea/
 node_modules/
-public/img/
 build/
 server/models/db_config.json
 public/bower_components/*

@@ -4,6 +4,7 @@
 import 'isomorphic-fetch';
 
 import {
+  REGISTER_FORM, LOGIN_FORM,
   REGISTER_FAILED, REGISTER_SUCCESS,
   LOGIN_REQEUST, LOGIN_FAILED, LOGIN_SUCCESS
 } from '../constants/ActionTypes';
@@ -26,6 +27,18 @@ function registerFailed(error){
   }
 }
 
+export function registerForm(){
+  return {
+    type: REGISTER_FORM
+  }
+}
+
+export function loginForm(){
+  return {
+    type: LOGIN_FORM
+  }
+}
+
 export function register(reg_data){
   function parseJSON(response){
     return response.json()
@@ -44,14 +57,15 @@ export function register(reg_data){
         if(data.status == 1){
           browserHistory.push('/login');
           dispatch(registerSuccess());
+          dispatch(loginForm());
         } else {
           console.log("Register form failed", data.error);
-          dispatch(registerFailed(data.error))
+          dispatch(registerFailed(data.error));
         }
       })
-    .catch((error) => {
-      console.log('Register request failed', error);
-      dispatch(registerFailed(error));
-    });
+      .catch((error) => {
+        console.log('Register request failed', error);
+        dispatch(registerFailed(error));
+      });
   };
 }

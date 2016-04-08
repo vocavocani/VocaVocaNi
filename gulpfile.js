@@ -3,7 +3,7 @@ var nodemon = require('gulp-nodemon');
 var shell = require('gulp-shell');
 
 // Initialize watch tasks
-gulp.task('watch', ['serverStart'], function() {
+gulp.task('watch', ['clientBuild', 'serverStart'], function() {
   gulp.watch(['./client/**/*'], ['clientBuild']);
 });
 
