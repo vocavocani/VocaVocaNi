@@ -32,9 +32,6 @@ export function userForm(state = {is_login_form: true}, action){
 }
 
 const regInitState = {
-  reg_id: null,
-  reg_pw_1: null,
-  reg_pw_2: null,
   reg_error: null
 };
 
@@ -49,7 +46,8 @@ export function register(state = regInitState, action){
     // 회원가입 성공
     case REGISTER_SUCCESS:
       return {
-        ...state
+        ...state,
+        reg_error: null
       };
     default:
       return state

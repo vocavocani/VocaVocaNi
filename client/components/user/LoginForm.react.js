@@ -29,8 +29,8 @@ export default class LoginForm extends React.Component {
     return (
       <form onSubmit={this._submitHandler.bind(this)}>
         <h3>로그인</h3>
-        <input type="text" ref="reg_id" placeholder="아이디"/>
-        <input type="password" ref="reg_pw" placeholder="비밀번호"/>
+        <input type="text" ref="reg_id" placeholder="아이디" required/>
+        <input type="password" ref="reg_pw" placeholder="비밀번호" required/>
         <button type="submit">login</button>
         <p className="message">아이디가 없으신가요? <span className="change-form" onClick={this._formChange}>회원가입</span></p>
       </form>

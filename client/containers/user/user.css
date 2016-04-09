@@ -48,3 +48,9 @@
     color: #4CAF50;
     cursor: pointer;
 }
+.error-message {
+    background-color: #FF7878;
+    color: white;
+    font-weight: bold;
+    margin: 0 0 15px;
+}

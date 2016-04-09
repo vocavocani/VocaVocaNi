@@ -9,11 +9,10 @@ import RegisterForm from '../../components/user/RegisterForm.react';
 import './user.css';
 
 class Login extends React.Component {
-
   _formChange = () =>{
     if(this.props.userForm.is_login_form){
       this.props.dispatch(registerForm());
-    }else{
+    } else {
       this.props.dispatch(loginForm());
     }
   };
@@ -41,9 +40,9 @@ class Login extends React.Component {
                     onRegisterSubmit={data =>
                       this.props.dispatch(register(data))}
                     formChange={this._formChange}
+                    reg_error={this.props.register.reg_error}
                   />
               }
-
             </div>
           </div>
         </div>
@@ -60,9 +59,9 @@ function mapStateToProps(state){
   const { userForm, register } = state;
 
   return {
-    error: state.reg_error,
     userForm,
-    register
+    register,
+    error: null
   }
 }
 
