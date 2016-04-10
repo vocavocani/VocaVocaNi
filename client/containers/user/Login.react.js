@@ -1,7 +1,8 @@
 import React, { PropTypes } from 'react';
 import ReactDom from 'react-dom';
 import { connect } from 'react-redux';
-import { register, loginForm, registerForm } from '../../actions/userAction';
+import { register, login,
+  loginForm, registerForm } from '../../actions/userAction';
 
 import LoginForm from '../../components/user/LoginForm.react';
 import RegisterForm from '../../components/user/RegisterForm.react';
@@ -9,6 +10,23 @@ import RegisterForm from '../../components/user/RegisterForm.react';
 import './user.css';
 
 class Login extends React.Component {
+  componentWillMount() {
+    const { auth } = this.props;
+    const { router } = this.context;
+
+    if (auth.user_data) {
+      router.push('/group');
+    }
+  };
+
+  componentWillReceiveProps(nextProps) {
+    const { router } = this.context;
+
+    if (nextProps.auth.user_data) {
+      router.push('/group');
+    }
+  }
+
   _formChange = () =>{
     if(this.props.userForm.is_login_form){
       this.props.dispatch(registerForm());
@@ -32,8 +50,9 @@ class Login extends React.Component {
                 this.props.userForm.is_login_form ?
                   <LoginForm
                     onLoginSubmit={data =>
-                      this.props.dispatch(register(data))}  // TODO Login 액션으로 수정 필요
+                      this.props.dispatch(login(data))}
                     formChange={this._formChange}
+                    login_error={this.props.auth.login_error}
                   />
                   :
                   <RegisterForm
@@ -55,10 +74,15 @@ Login.propTypes = {
   dispatch: PropTypes.func.isRequired
 };
 
+Login.contextTypes ={
+  router: PropTypes.object.isRequired
+};
+
 function mapStateToProps(state){
-  const { userForm, register } = state;
+  const { userForm, register, auth } = state;
 
   return {
+    auth,
     userForm,
     register,
     error: null

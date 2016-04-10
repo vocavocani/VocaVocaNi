@@ -7,6 +7,7 @@ var my_conf = require('../my_config');
 
 /*******************
  *  Register
+ *  @err_code: 1=파라미터, 2=id(영문,숫자), 3=패스워드 불일치, 4=아이디존재, 10=DB에러
  ********************/
 exports.register = function(req, res){
   var regType = /^[A-Za-z0-9+]*$/;  // only en, num
@@ -40,17 +41,10 @@ exports.register = function(req, res){
       "user_password": my_conf.do_ciper(req.body.pw_2),
       "user_nickname": req.body.nickname
     };
-    userModel.register(user_data, function(status, message, err_code){
-      var err = null;
-      if(!status){
-        err = {
-          "code": err_code,
-          "message": message
-        };
-      }
+    userModel.register(user_data, function(status, _err){
       return res.json({
         "status": status,
-        "error": err
+        "error": _err
       });
     });
   }
@@ -58,17 +52,68 @@ exports.register = function(req, res){
 
 /*******************
  *  Login
+ *  @err_code: 1=파라미터, 2=아이디없음, 3=비밀번호틀림, 10=DB에러
  ********************/
 exports.login = function(req, res){
-  console.log(req.body);
-  if(req.body.id == "aa" && req.body.pw == "1234"){
-    res.json({
-      "status": 1,
-      "username": req.body.id
+  if(!req.body.id || !req.body.pw) {  // parameter check
+    return res.json({
+      "status": 0,
+      "error": {
+        "code": 1,
+        "message": "invalid parameter"
+      }
     });
   }else{
-    res.json({
-      "status": 0
-    })
+    var user_data = {
+      "user_id": req.body.id,
+      "user_password": my_conf.do_ciper(req.body.pw)
+    };
+    userModel.login(user_data, function(status, token, message, err_code){
+      if(!status){
+        return res.status(401).json({
+          "status": status,
+          "token": token,
+          "error": {
+            "code": err_code,
+            "message": message
+          }
+        });
+      }else{
+        return res.json({
+          "status": status,
+          "token": token,
+          "error": null
+        });
+      }
+    });
+  }
+};
+
+/*******************
+ *  Authenticate
+ *  @err_code: 401=인증실패
+ ********************/
+exports.auth = function(req, res, next){
+  if(!req.headers.token){
+    return res.status(401).json({
+      "status": 0,
+      "error": {
+        "code": 401,
+        "message": "Not found token"
+      }
+    });
+  }else{
+    userModel.auth(req.headers.token, function(status, user_idx, _err){
+      if(!status){
+        return res.status(401).json({
+          "status": status,
+          "error": _err
+        });
+      }else{
+        req.user_idx = user_idx;
+        return res.json({"status": req.user_idx});
+        //next();
+      }
+    });
   }
 };

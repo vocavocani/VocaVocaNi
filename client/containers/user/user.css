@@ -54,3 +54,6 @@
     font-weight: bold;
     margin: 0 0 15px;
 }
+.login-background {
+    background-image: url(/images/login_background.jpg);
+}

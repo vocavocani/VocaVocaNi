@@ -2,23 +2,47 @@ import React, {  PropTypes } from 'react'
 import ReactDom from 'react-dom';
 
 export default class LoginForm extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      id_value: null,
+      form_error_string: null
+    };
+  }
 
   componentDidMount = () => {
-    ReactDom.findDOMNode(this.refs.reg_id).focus();
+    ReactDom.findDOMNode(this.refs.user_id).focus();
+  };
+
+  _idREgCheck = e => {
+    const regType = /^[A-Za-z0-9+]*$/g;
+    if(!regType.test(e.target.value)){
+      e.preventDefault();
+      return;
+    }
+    this.setState({id_value: e.target.value});
   };
 
   _submitHandler = e => {
     // TODO 비밀번호 확인 리액트에서 하기
     e.preventDefault();
-    const reg_id = this.refs.reg_id;
-    const reg_pw = this.refs.reg_pw;
+    const user_id = this.refs.user_id;
+    const user_pw = this.refs.user_pw;
     const obj = {
-      id: reg_id.value.trim(),
-      pw_1: reg_pw.value.trim()
+      id: user_id.value.trim(),
+      pw: user_pw.value.trim()
     };
+
+    this.setState({form_error_string: null});
+    const regType = /^[A-Za-z0-9+]*$/;  // only en, num
+    if(!regType.test(obj.id)) {
+      this.setState({form_error_string: "ID는 영문과 숫자의 조합이여야합니다."});
+      user_id.value = '';
+      user_id.focus();
+      return
+    }
+
     this.props.onLoginSubmit(obj);
-    reg_id.value = '';
-    reg_pw.value = '';
   };
 
   _formChange = e => {
@@ -26,11 +50,29 @@ export default class LoginForm extends React.Component {
   };
 
   render() {
+    let error_string = this.state.form_error_string;
+    const login_error = this.props.login_error;
+
+    if(login_error != null &&
+      this.state.form_error_string == null){
+      if(login_error.code == 2){
+        error_string = "아이디가 존재하지 않습니다.";
+      }else if(login_error.code == 3){
+        error_string = "비밀번호가 일치하지 않습니다,";
+      }
+    }
+
     return (
       <form onSubmit={this._submitHandler.bind(this)}>
         <h3>로그인</h3>
-        <input type="text" ref="reg_id" placeholder="아이디" required/>
-        <input type="password" ref="reg_pw" placeholder="비밀번호" required/>
+        <input type="text" ref="user_id" placeholder="아이디" maxLength="50"
+               onChange={this._idREgCheck} value={this.state.id_value} required/>
+        <input type="password" ref="user_pw" placeholder="비밀번호" required/>
+
+        <div className="error-message">
+          {error_string}
+        </div>
+
         <button type="submit">login</button>
         <p className="message">아이디가 없으신가요? <span className="change-form" onClick={this._formChange}>회원가입</span></p>
       </form>
@@ -40,5 +82,6 @@ export default class LoginForm extends React.Component {
 
 LoginForm.propTypes = {
   onLoginSubmit: PropTypes.func.isRequired,
-  formChange: PropTypes.func.isRequired
+  formChange: PropTypes.func.isRequired,
+  login_error: PropTypes.object.isRequired
 };

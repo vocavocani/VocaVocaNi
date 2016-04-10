@@ -7,10 +7,10 @@ import {
   REGISTER_FAILED, REGISTER_SUCCESS,
   LOGIN_FAILED, LOGIN_SUCCESS
 } from '../constants/ActionTypes';
-
+import { loadUserData } from '../utils/utils'
 
 /*******************
- *  User Reducer
+ *  User Form
  ********************/
 export function userForm(state = {is_login_form: true}, action){
   switch (action.type) {
@@ -31,6 +31,9 @@ export function userForm(state = {is_login_form: true}, action){
   }
 }
 
+/*******************
+ *  Register
+ ********************/
 const regInitState = {
   reg_error: null
 };
@@ -39,6 +42,7 @@ export function register(state = regInitState, action){
   switch (action.type) {
     // 회원가입 실패
     case REGISTER_FAILED:
+      console.log(action.error);
       return {
         ...state,
         reg_error: action.error
@@ -51,5 +55,35 @@ export function register(state = regInitState, action){
       };
     default:
       return state
+  }
+}
+
+/*******************
+ *  Login
+ ********************/
+const authInitialState = {
+  login_error: null
+};
+
+function authInitializeState(){
+  const user_data = loadUserData();
+  return {...authInitialState, "user_data": user_data};
+}
+
+export function auth(state = authInitializeState(), action){
+  switch (action.type) {
+    case LOGIN_FAILED:
+      console.log(action.error);
+      return {
+        ...state,
+        login_error: action.error
+      };
+    case LOGIN_SUCCESS:
+      return {
+        ...state,
+        user_data: action.user_data
+      };
+    default:
+      return state;
   }
 }

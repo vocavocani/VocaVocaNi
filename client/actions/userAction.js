@@ -6,10 +6,14 @@ import 'isomorphic-fetch';
 import {
   REGISTER_FORM, LOGIN_FORM,
   REGISTER_FAILED, REGISTER_SUCCESS,
-  LOGIN_REQEUST, LOGIN_FAILED, LOGIN_SUCCESS
+  LOGIN_FAILED, LOGIN_SUCCESS
 } from '../constants/ActionTypes';
-import { browserHistory } from 'react-router'
+import { browserHistory } from 'react-router';
+import {
+  parseJSON,
+  setToken, decodeUserData } from '../utils/utils';
 
+//TODO statusCode 처리
 
 /*******************
  *  Register Action Creator
@@ -40,12 +44,8 @@ export function loginForm(){
 }
 
 export function register(reg_data){
-  function parseJSON(response){
-    return response.json()
-  }
-
   return dispatch => {
-    return fetch('/api/register', {
+    return fetch('/api/user/register', {
       method: 'post',
       headers: {
         'Accept': 'application/json',
@@ -66,6 +66,50 @@ export function register(reg_data){
       .catch((error) => {
         console.log('Register request failed', error);
         dispatch(registerFailed(error));
+      });
+  };
+}
+
+/*******************
+ *  Login Action Creator
+ ********************/
+function loginSuccess(jwt_token){
+  setToken(jwt_token);
+  const user_data = decodeUserData(jwt_token);
+  return {
+    type: LOGIN_SUCCESS,
+    user_data: user_data
+  }
+}
+
+function loginFailed(error){
+  return {
+    type: LOGIN_FAILED,
+    error
+  }
+}
+
+export function login(user_data){
+  return dispatch => {
+    return fetch('/api/user/login', {
+      method: 'post',
+      headers: {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(user_data)
+    }).then(parseJSON)
+      .then((data) => {
+        if(data.status == 1){
+          dispatch(loginSuccess(data.token));
+        }else{
+          console.log("Login failed", data.error);
+          dispatch(loginFailed(data.error));
+        }
+      })
+      .catch((error) => {
+        console.log("Login failed", error);
+        dispatch(loginFailed(error));
       });
   };
 }
