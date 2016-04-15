@@ -24,7 +24,6 @@ export default class LoginForm extends React.Component {
   };
 
   _submitHandler = e => {
-    // TODO 비밀번호 확인 리액트에서 하기
     e.preventDefault();
     const user_id = this.refs.user_id;
     const user_pw = this.refs.user_pw;

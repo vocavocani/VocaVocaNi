@@ -111,8 +111,7 @@ exports.auth = function(req, res, next){
         });
       }else{
         req.user_idx = user_idx;
-        return res.json({"status": req.user_idx});
-        //next();
+        next();
       }
     });
   }

@@ -6,14 +6,13 @@ import 'isomorphic-fetch';
 import {
   REGISTER_FORM, LOGIN_FORM,
   REGISTER_FAILED, REGISTER_SUCCESS,
-  LOGIN_FAILED, LOGIN_SUCCESS
+  LOGIN_FAILED, LOGIN_SUCCESS,
+  LOGOUT
 } from '../constants/ActionTypes';
 import { browserHistory } from 'react-router';
 import {
-  parseJSON,
-  setToken, decodeUserData } from '../utils/utils';
-
-//TODO statusCode 처리
+  parseJSON, decodeUserData,
+  setToken, removeToken } from '../utils/utils';
 
 /*******************
  *  Register Action Creator
@@ -86,6 +85,14 @@ function loginFailed(error){
   return {
     type: LOGIN_FAILED,
     error
+  }
+}
+
+export function logout(){
+  removeToken();
+  browserHistory.push('/login');
+  return {
+    type: LOGOUT
   }
 }
 

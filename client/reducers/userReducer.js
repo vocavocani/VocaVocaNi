@@ -5,7 +5,8 @@
 import {
   REGISTER_FORM, LOGIN_FORM,
   REGISTER_FAILED, REGISTER_SUCCESS,
-  LOGIN_FAILED, LOGIN_SUCCESS
+  LOGIN_FAILED, LOGIN_SUCCESS,
+  LOGOUT
 } from '../constants/ActionTypes';
 import { loadUserData } from '../utils/utils'
 
@@ -82,6 +83,11 @@ export function auth(state = authInitializeState(), action){
       return {
         ...state,
         user_data: action.user_data
+      };
+    case LOGOUT:
+      return {
+        ...state,
+        user_data: false
       };
     default:
       return state;

@@ -4,10 +4,11 @@
 import React, { PropTypes } from 'react';
 import ReactDom from 'react-dom';
 import { connect } from 'react-redux';
+import { logout } from '../../actions/userAction'
+
+import Header from '../../components/header/Header.react';
 
 class Base extends React.Component {
-
-  // TODO server auth를 해야하나...
 
   componentWillMount() {
     const { auth } = this.props;
@@ -21,11 +22,21 @@ class Base extends React.Component {
   render(){
     return (
       <div id="baseContent">
-        {this.props.children}
+        <Header
+          user_data={this.props.auth.user_data}
+          _logout={() => this.props.dispatch(logout())}
+        />
+        <div className="container">
+          {this.props.children}
+        </div>
       </div>
     )
   }
 }
+
+Base.propTypes = {
+  dispatch: PropTypes.func.isRequired
+};
 
 Base.contextTypes ={
   router: PropTypes.object.isRequired
@@ -33,7 +44,7 @@ Base.contextTypes ={
 
 function mapStateToProps(state){
   const { auth } = state;
-  console.log("state", state);
+
   return {
     auth
   }

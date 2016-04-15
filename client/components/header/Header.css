@@ -1,0 +1,65 @@
+/* Logo */
+.logo{
+    margin: 0;
+    padding-top: 5px;
+}
+
+/* The first bar */
+
+.header-two-bars .header-first-bar{
+    background-color:#8B5DE1;
+    height: 50px;
+    color: #ffffff;
+    box-sizing: border-box;
+}
+
+.header-first-bar .user-information{
+    text-align: right;
+    padding-top: 10px;
+}
+.header-first-bar .user-id-nickname{
+    display: inline-block;
+    margin-right: 10px;
+    font-size: 20px;
+}
+.header-first-bar .user-logout{
+    padding-top: 8px;
+}
+.header-first-bar .logout-btn{
+    background-color: #8ED296;
+}
+.header-first-bar .logout-btn:hover{
+    background-color: #C3C3E5;
+    color: white;
+}
+
+/* Second Bar */
+
+.header-two-bars .header-second-bar {
+    background-color: #C3C3E5;
+    box-shadow: 1px 3px 3px 0 rgba(0, 0, 0, 0.05);
+    height: 60px;
+}
+.header-second-bar .nav{
+    font-size: 20px;
+    padding-top: 20px;
+    height: 60px;
+    cursor: pointer;
+}
+
+@media all and (max-width: 768px) {
+    .header-first-bar .user-logout{
+        display: none;
+    }
+
+    .header-two-bars .header-second-bar{
+        text-align: center;
+        height: 100px;
+    }
+    .header-second-bar .nav{
+        font-size: 20px;
+        padding-top: 30px;
+        height: 60px;
+        cursor: pointer;
+    }
+}

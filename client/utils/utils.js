@@ -33,9 +33,10 @@ export function loadUserData() {
     const now = new Date().getTime() / 1000;
 
     if (now > user_data.exp) {
-      // user profile has expired.
-      return {};
+      removeToken();  // 브라우저 토큰 제거
+      return false;
     }
+
     return user_data;
   } catch (err) {
     return null;
