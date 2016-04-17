@@ -20,13 +20,31 @@ app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));  // assets
 app.use(express.static(path.join(__dirname, 'build')));  // webpack build .js file
 
-// initialize routes
+// RESTful api confirm
 app.use((req, res, next) => {
   req.path.indexOf('api') != -1 ?
     next() :
     res.render("index");
 });
+
+// initialize routes
 require('./server/routes/api').initApp(app);
+
+/*******************
+ *  Exception decide err_code
+ *  1 = Invalid parameter
+ ********************/
+app.use(function(err_code, req, res, next){
+  if(err_code == 1) {
+    return res.json({
+      "status": 0,
+      "error": {
+        "code": 1,
+        "message": "invalid parameter"
+      }
+    })
+  }
+});
 
 // Server Port Set
 var http = require('http');
