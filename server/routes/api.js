@@ -3,6 +3,7 @@
  */
 var testCtrl = require('../controllers/testCtrl');
 var userCtrl = require('../controllers/userCtrl');
+var groupCtrl = require('../controllers/groupCtrl');
 
 exports.initApp = function(app){
     // TEST
@@ -14,6 +15,8 @@ exports.initApp = function(app){
       .post(userCtrl.login);
     app.route('/api/user/register')
       .post(userCtrl.register);
-    app.route('/api/auth')
-      .get(userCtrl.auth);
+
+    // Group
+    app.route('/api/group')
+      .post(userCtrl.auth, groupCtrl.groupCreate)
 };

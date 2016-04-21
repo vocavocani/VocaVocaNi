@@ -2,7 +2,10 @@ var path = require('path');
 var webpack = require('webpack');
 
 var config = {
-    entry: "./client/router.react.jsx",
+    entry: [
+        'babel-polyfill',
+        "./client/router.react.jsx"
+    ],
 
     output: {
         path: path.join(__dirname, "build"),
@@ -16,7 +19,7 @@ var config = {
                 loader: 'babel-loader',
                 exclude: /node_modules/,
                 query: {
-                    presets: ["react", "es2015", "stage-0"]
+                    presets: ["es2015", "stage-0", "react"]
                 }
             },
             {

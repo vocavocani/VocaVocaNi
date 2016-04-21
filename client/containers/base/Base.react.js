@@ -20,17 +20,26 @@ class Base extends React.Component {
   };
 
   render(){
-    return (
-      <div id="baseContent">
-        <Header
-          user_data={this.props.auth.user_data}
-          _logout={() => this.props.dispatch(logout())}
-        />
-        <div className="container">
-          {this.props.children}
+    const { auth } = this.props;
+    // 이건쫌 아닌거같은데
+    if(auth.user_data) {
+      return (
+        <div id="baseContent">
+          <Header
+            user_data={this.props.auth.user_data}
+            _logout={() => this.props.dispatch(logout())}
+          />
+          <div className="container">
+            {this.props.children}
+          </div>
         </div>
-      </div>
-    )
+      )
+    }else{
+      return (
+        <div id="notAuth">
+        </div>
+      )
+    }
   }
 }
 

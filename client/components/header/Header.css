@@ -54,12 +54,15 @@
 
     .header-two-bars .header-second-bar{
         text-align: center;
-        height: 100px;
+        height: 40px;
     }
     .header-second-bar .nav{
         font-size: 20px;
-        padding-top: 30px;
-        height: 60px;
+        padding-top: 5px;
+        height: 20px;
         cursor: pointer;
+    }
+    .second-nav-text{
+        display: none;
     }
 }

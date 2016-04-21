@@ -49,10 +49,12 @@ export default class Header extends React.Component {
           <div className="container">
             <div className="row">
               <div className="col-xs-offset-4 col-xs-2 nav">
-                <i className="fa fa-group"></i> Group
+                <i className="fa fa-group"></i>
+                <span className="second-nav-text">Group</span>
               </div>
               <div className="col-xs-2 nav">
-                <i className="fa fa-search"></i> Search
+                <i className="fa fa-search"></i>
+                <span className="second-nav-text">Search</span>
               </div>
             </div>
           </div>

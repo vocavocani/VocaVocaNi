@@ -9,16 +9,10 @@ var my_conf = require('../my_config');
  *  Register
  *  @err_code: 1=파라미터, 2=id(영문,숫자), 3=패스워드 불일치, 4=아이디존재, 10=DB에러
  ********************/
-exports.register = function(req, res){
+exports.register = function(req, res, next){
   var regType = /^[A-Za-z0-9+]*$/;  // only en, num
   if(!req.body.id || !req.body.nickname || !req.body.pw_1 || !req.body.pw_2) {  // parameter check
-    return res.json({
-      "status": 0,
-      "error": {
-        "code": 1,
-        "message": "invalid parameter"
-      }
-    });
+    next(1);  // err_code = 1
   }else if(!regType.test(req.body.id)){
     return res.json({
       "status": 0,
@@ -54,35 +48,26 @@ exports.register = function(req, res){
  *  Login
  *  @err_code: 1=파라미터, 2=아이디없음, 3=비밀번호틀림, 10=DB에러
  ********************/
-exports.login = function(req, res){
+exports.login = function(req, res, next){
   if(!req.body.id || !req.body.pw) {  // parameter check
-    return res.json({
-      "status": 0,
-      "error": {
-        "code": 1,
-        "message": "invalid parameter"
-      }
-    });
+    next(1);  // err_code = 1
   }else{
     var user_data = {
       "user_id": req.body.id,
       "user_password": my_conf.do_ciper(req.body.pw)
     };
-    userModel.login(user_data, function(status, token, message, err_code){
+    userModel.login(user_data, function(status, token, _err){
       if(!status){
         return res.status(401).json({
           "status": status,
           "token": token,
-          "error": {
-            "code": err_code,
-            "message": message
-          }
+          "error": _err
         });
       }else{
         return res.json({
           "status": status,
           "token": token,
-          "error": null
+          "error": _err
         });
       }
     });
