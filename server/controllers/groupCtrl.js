@@ -15,9 +15,9 @@ exports.groupCreate = (req, res, next) => {
     next(1);  // err_code = 1
   }else{
     const group_data = {
-      title: req.body.title,
-      category: req.body.category,
-      creator: req.user_idx
+      group_title: req.body.title,
+      user_idx: req.user_idx,
+      cate_idx: req.body.category
     };
 
     groupModel.groupCreate(group_data, (status, _err) => {

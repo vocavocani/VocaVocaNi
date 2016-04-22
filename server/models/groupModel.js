@@ -12,7 +12,7 @@ const pool = mysql.createPool(db_config);
 
 /*******************
  *  Group Create
- *  @param: group_data = {title(string), category(Array), creator(int)}
+ *  @param: group_data = {group_title(string), user_idx(int), cate_idx(int)}
  ********************/
 exports.groupCreate = (group_data, done) => {
   pool.getConnection((err, conn) => {
@@ -28,9 +28,9 @@ exports.groupCreate = (group_data, done) => {
         }else{
           async.waterfall([
               (callback) => {  // Group Create
-                const sql = "INSERT INTO vvn_group(group_title, user_idx) VALUES (?,?)";
+                const sql = "INSERT INTO vvn_group SET ?";
 
-                conn.query(sql, [group_data.title, group_data.creator], (err, rows) => {
+                conn.query(sql, group_data, (err, rows) => {
                   if(err){
                     const _err_1 = utils.dbError("Group Create waterfall error_1", err);
                     callback(err, _err_1);
@@ -47,7 +47,7 @@ exports.groupCreate = (group_data, done) => {
               (group_id, callback) => {  // vvn_group_user insert data
                 const sql = "INSERT INTO vvn_group_user(group_idx, user_idx, group_user_confirm) VALUES (?,?,?)";
 
-                conn.query(sql, [group_id, group_data.creator, 1], (err, rows) => {
+                conn.query(sql, [group_id, group_data.user_idx, 1], (err, rows) => {
                   if(err){
                     const _err_1 = utils.dbError("Group Create waterfall error_3", err);
                     callback(err, _err_1);
@@ -57,31 +57,6 @@ exports.groupCreate = (group_data, done) => {
                     }else{
                       const _err_2 = utils.dbError("Group Create waterfall error_4");
                       callback("Group Create waterfall error_4", _err_2);  // 임의의 에러
-                    }
-                  }
-                });
-              },
-              (group_id, callback) => {  // vvn_group_cate insert data
-                const sql = "INSERT INTO vvn_group_cate(group_idx, cate_idx) VALUES ?";
-
-                // make bulk insert data
-                let data = [];
-                const cate_cnt=group_data.category.length;
-                for(let i=0; i < cate_cnt; i++){
-                  data[i] = [];
-                  data[i].push(group_id, group_data.category[i]);
-                }
-
-                conn.query(sql, [data], (err, rows) => {
-                  if(err){
-                    const _err_1 = utils.dbError("Group Create waterfall error_5", err);
-                    callback(err, _err_1);
-                  }else{
-                    if(rows.affectedRows == 0){
-                      const _err_2 = utils.dbError("Group Create waterfall error_6");
-                      callback("Group Create waterfall error_6", _err_2);  // 임의의 에러
-                    }else{
-                      callback(null);
                     }
                   }
                 });
