@@ -94,5 +94,17 @@ exports.groupCreate = (group_data, done) => {
  *  @param: user_idx(int)
  ********************/
 exports.myGroupList = (user_idx, done) => {
+  const sql =
+    "SELECT g.group_title, c.cate_title " +
+    "FROM vvn_group g, vvn_category c " +
+    "WHERE g.cate_idx = c.cate_idx AND g.user_idx = ?";
 
+  pool.query(sql, user_idx, (err, rows) => {
+    if(err){
+      const _err = utils.dbError("My Group List DB Error", err);
+      done(0, null, _err);
+    }else{
+      done(1, rows, null);
+    }
+  });
 };
