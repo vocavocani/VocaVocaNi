@@ -5,7 +5,7 @@
 /*************
  * Create DB Error Object
  *************/
-exports.dbError = function(message, error){
+exports.dbError = (message, error) => {
   console.log(message + " ===> " + error);
 
   return {

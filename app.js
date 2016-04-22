@@ -1,11 +1,11 @@
-var express = require('express');
-var path = require('path');
-var favicon = require('serve-favicon');
-var logger = require('morgan');
-var cookieParser = require('cookie-parser');
-var bodyParser = require('body-parser');
+const express = require('express');
+const path = require('path');
+const favicon = require('serve-favicon');
+const logger = require('morgan');
+const cookieParser = require('cookie-parser');
+const bodyParser = require('body-parser');
 
-var app = express();
+const app = express();
 
 // view engine setup
 app.set('views', path.join(__dirname, 'client'));
@@ -34,7 +34,7 @@ require('./server/routes/api').initApp(app);
  *  Exception decide err_code
  *  1 = Invalid parameter
  ********************/
-app.use(function(err_code, req, res, next){
+app.use((err_code, req, res, next) => {
   if(err_code == 1) {
     return res.json({
       "status": 0,
@@ -47,9 +47,9 @@ app.use(function(err_code, req, res, next){
 });
 
 // Server Port Set
-var http = require('http');
+const http = require('http');
 app.set('port', 3000); //3000번 포트로 지정
-var server = http.createServer(app);
+const server = http.createServer(app);
 server.listen(app.get('port'));
 console.log('[WordStudy] Application Listening on Port 3000');
 

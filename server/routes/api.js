@@ -1,11 +1,11 @@
 /**
  * Created by kingw on 2016-02-10.
  */
-var testCtrl = require('../controllers/testCtrl');
-var userCtrl = require('../controllers/userCtrl');
-var groupCtrl = require('../controllers/groupCtrl');
+const testCtrl = require('../controllers/testCtrl');
+const userCtrl = require('../controllers/userCtrl');
+const groupCtrl = require('../controllers/groupCtrl');
 
-exports.initApp = function(app){
+exports.initApp = (app) => {
     // TEST
     app.route('/api/data')
       .get(testCtrl.data);
@@ -18,5 +18,6 @@ exports.initApp = function(app){
 
     // Group
     app.route('/api/group')
-      .post(userCtrl.auth, groupCtrl.groupCreate)
+      .get(userCtrl.auth, groupCtrl.myGroupList)
+      .post(userCtrl.auth, groupCtrl.groupCreate);
 };
