@@ -1,6 +1,8 @@
 /**
  * Created by kingw on 2016-02-10.
  */
+'use strict';
+
 const testCtrl = require('../controllers/testCtrl');
 const userCtrl = require('../controllers/userCtrl');
 const groupCtrl = require('../controllers/groupCtrl');

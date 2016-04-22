@@ -1,6 +1,8 @@
 /**
  * Created by kingw on 2016-04-09.
  */
+'use strict';
+
 const mysql = require('mysql');
 const db_config = require('./db_config');
 const my = require('../my_config');
