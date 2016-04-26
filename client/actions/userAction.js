@@ -11,7 +11,7 @@ import {
 } from '../constants/ActionTypes';
 import { browserHistory } from 'react-router';
 import {
-  parseJSON, decodeUserData,
+  checkStatus, parseJSON, decodeUserData,
   setToken, removeToken } from '../utils/utils';
 
 /*******************
@@ -51,15 +51,15 @@ export function register(reg_data){
         'Content-Type': 'application/json'
       },
       body: JSON.stringify(reg_data)
-    }).then(parseJSON)
+    }).then(checkStatus)
+      .then(parseJSON)
       .then((data) => {
-        if(data.status == 1){
+        if(data.error){
+          dispatch(registerFailed(data.error));
+        }else{
           browserHistory.push('/login');
           dispatch(registerSuccess());
           dispatch(loginForm());
-        } else {
-          console.log("Register form failed", data.error);
-          dispatch(registerFailed(data.error));
         }
       })
       .catch((error) => {
@@ -105,13 +105,13 @@ export function login(user_data){
         'Content-Type': 'application/json'
       },
       body: JSON.stringify(user_data)
-    }).then(parseJSON)
+    }).then(checkStatus)
+      .then(parseJSON)
       .then((data) => {
-        if(data.status == 1){
-          dispatch(loginSuccess(data.token));
-        }else{
-          console.log("Login failed", data.error);
+        if(data.error){
           dispatch(loginFailed(data.error));
+        }else{
+          dispatch(loginSuccess(data.token));
         }
       })
       .catch((error) => {

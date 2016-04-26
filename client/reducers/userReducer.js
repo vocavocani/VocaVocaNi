@@ -68,7 +68,7 @@ const authInitialState = {
 
 function authInitializeState(){
   const user_data = loadUserData();
-  return {...authInitialState, "user_data": user_data};
+  return {...authInitialState, user_data};
 }
 
 export function auth(state = authInitializeState(), action){

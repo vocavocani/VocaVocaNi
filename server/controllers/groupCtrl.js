@@ -8,11 +8,10 @@ const async = require('async');
 
 /*******************
  *  Group Create
- *  @err_code: 1=파라미터, 10=DB에러
  ********************/
 exports.groupCreate = (req, res, next) => {
   if(!req.body.title || !req.body.category) {
-    next(1);  // err_code = 1
+    next(9401);
   }else{
     const group_data = {
       group_title: req.body.title,
@@ -20,11 +19,12 @@ exports.groupCreate = (req, res, next) => {
       cate_idx: req.body.category
     };
 
-    groupModel.groupCreate(group_data, (status, _err) => {
-      return res.json({
-        "status": status,
-        "error": _err
-      });
+    groupModel.groupCreate(group_data, (err) => {
+      if(err){
+        next(err);
+      }else{
+        return res.json({});
+      }
     });
   }
 };
@@ -32,14 +32,15 @@ exports.groupCreate = (req, res, next) => {
 
 /*******************
  *  My Group List
- *  @err_code: 10=DB에러
  ********************/
-exports.myGroupList = (req, res) => {
-  groupModel.myGroupList(req.user_idx, (status, group_list, _err) => {
-    return res.json({
-      "status": status,
-      "group_list": group_list,
-      "error": _err
-    });
+exports.myGroupList = (req, res, next) => {
+  groupModel.myGroupList(req.user_idx, (err, group_list) => {
+    if(err){
+      next(err);
+    }else{
+      return res.json({
+        "group_list": group_list
+      });
+    }
   });
 };

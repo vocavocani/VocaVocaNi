@@ -3,7 +3,19 @@
  */
 import jwt_decode from 'jwt-decode';
 
-//TODO statusCode 처리
+export function checkStatus(response) {
+  if (!response.ok) {   // (response.status < 200 || response.status > 300)
+
+    let error = new Error(response.statusText);  // error message
+    error.response = response;
+
+    if (response.status == 500){
+      error = "일시적 서버 에러";
+    }
+    throw error;
+  }
+  return response;
+}
 
 
 export function parseJSON(response) {

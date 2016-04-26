@@ -9,6 +9,9 @@ const bodyParser = require('body-parser');
 
 const app = express();
 
+const utils = require('./server/utils');
+const errors = require('./server/errors');
+
 // view engine setup
 app.set('views', path.join(__dirname, 'client'));
 app.set('view engine', 'ejs');
@@ -33,19 +36,30 @@ app.use((req, res, next) => {
 require('./server/routes/api').initApp(app);
 
 /*******************
- *  Exception decide err_code
- *  1 = Invalid parameter
+ *  Error Handler
+ *  400 or 500
  ********************/
-app.use((err_code, req, res, next) => {
-  if(err_code == 1) {
-    return res.json({
-      "status": 0,
-      "error": {
-        "code": 1,
-        "message": "invalid parameter"
-      }
-    })
+app.use((err, req, res, next) => {
+  let status, e;
+
+  if(typeof err == 'number'){
+    if(err == 9401){
+      console.log("[ERROR param] [" + req.path + "] param ===>", req.body);
+    }
+    e = errors[err];  // Error 메세지 호출
+    status = e.status;
+  }else if(err){
+    //if(err.sqlState){  // DB 에러 따로처리???
+    //  status = 500;
+    //}
+    e = errors[500];
+    status = e.status;
+    console.log("[ERROR Handler] Error code or message ===>", err);
   }
+
+  return res.status(status).json({
+    "error": e.message
+  });
 });
 
 // Server Port Set

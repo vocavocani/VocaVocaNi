@@ -17,14 +17,11 @@ const pool = mysql.createPool(db_config);
 exports.groupCreate = (group_data, done) => {
   pool.getConnection((err, conn) => {
     if(err){
-      const _err = utils.dbError("Group Create getConnection error", err);
-      done(0, _err);
+      done(err);
     }else{
       conn.beginTransaction((err) => {
         if(err){
-          const _err = utils.dbError("Group Create beginTransaction error", err);
-          done(0, _err);
-          conn.release();
+          done(err);
         }else{
           async.waterfall([
               (callback) => {  // Group Create
@@ -32,14 +29,13 @@ exports.groupCreate = (group_data, done) => {
 
                 conn.query(sql, group_data, (err, rows) => {
                   if(err){
-                    const _err_1 = utils.dbError("Group Create waterfall error_1", err);
-                    callback(err, _err_1);
+                    callback(err);
                   }else{
                     if(rows.affectedRows == 1){
                       callback(null, rows.insertId);  // rows.insertId = create group idx
                     }else{
-                      const _err_2 = utils.dbError("Group Create waterfall error_2");
-                      callback("Group Create waterfall error_2", _err_2);  // 임의의 에러
+                      const _err = new Error("Group Create Custom Error(insert vvn_group)");
+                      callback(_err);
                     }
                   }
                 });
@@ -49,33 +45,31 @@ exports.groupCreate = (group_data, done) => {
 
                 conn.query(sql, [group_id, group_data.user_idx, 1], (err, rows) => {
                   if(err){
-                    const _err_1 = utils.dbError("Group Create waterfall error_3", err);
-                    callback(err, _err_1);
+                    callback(err);
                   }else{
                     if(rows.affectedRows == 1){
-                      callback(null, group_id);
+                      callback(null);
                     }else{
-                      const _err_2 = utils.dbError("Group Create waterfall error_4");
-                      callback("Group Create waterfall error_4", _err_2);  // 임의의 에러
+                      const _err = new Error("Group Create Custom Error(insert vvn_group_user)");
+                      callback(_err);
                     }
                   }
                 });
               }
             ],
-            (err, _err) => {
+            (err) => {
               if(err){
                 conn.rollback(() => {
-                  done(0, _err);
+                  done(err);
                   conn.release();
                 });
               }else{
                 conn.commit((err) => {
                   if(err){
-                    const _err = utils.dbError("Group Create commit error", err);
-                    done(0, _err);
+                    done(err);
                     conn.release();
                   }else{
-                    done(1, null);
+                    done(null);
                     conn.release();
                   }
                 });
@@ -101,10 +95,9 @@ exports.myGroupList = (user_idx, done) => {
 
   pool.query(sql, user_idx, (err, rows) => {
     if(err){
-      const _err = utils.dbError("My Group List DB Error", err);
-      done(0, null, _err);
+      done(err);
     }else{
-      done(1, rows, null);
+      done(null, rows);
     }
   });
 };

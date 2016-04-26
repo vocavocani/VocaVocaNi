@@ -49,17 +49,7 @@ export default class LoginForm extends React.Component {
   };
 
   render() {
-    let error_string = this.state.form_error_string;
-    const login_error = this.props.login_error;
-
-    if(login_error != null &&
-      this.state.form_error_string == null){
-      if(login_error.code == 2){
-        error_string = "아이디가 존재하지 않습니다.";
-      }else if(login_error.code == 3){
-        error_string = "비밀번호가 일치하지 않습니다,";
-      }
-    }
+    let error_string = this.state.form_error_string || this.props.login_error;
 
     return (
       <form onSubmit={this._submitHandler.bind(this)}>

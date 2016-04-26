@@ -68,13 +68,7 @@ export default class RegisterForm extends React.Component {
   };
 
   render() {
-    let error_string = this.state.form_error_string;
-    const reg_error = this.props.reg_error;
-
-    if(reg_error != null &&
-      this.state.form_error_string == null){
-      error_string = "아이디가 중복됩니다."
-    }
+    let error_string = this.state.form_error_string || this.props.reg_error;
 
     return (
       <form onSubmit={this._submitHandler.bind(this)}>
