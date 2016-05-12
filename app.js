@@ -54,7 +54,7 @@ app.use((err, req, res, next) => {
     //}
     e = errors[500];
     status = e.status;
-    console.log("[ERROR Handler] Error code or message ===>", err);
+    console.log("[ERROR Handler][" + req.path + "] Error code or message ===>", err);
   }
 
   return res.status(status).json({
