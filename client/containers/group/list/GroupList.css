@@ -1,0 +1,37 @@
+.card-list{
+    text-align: center;
+}
+.card-background {
+    display: inline-block;
+    position: relative;
+    z-index: 1;
+    background: white;
+    width: 80%;
+    border-radius: 2%;
+    margin-bottom: 50px;
+    text-align: center;
+    box-shadow: 0 0 20px 0 rgba(0, 0, 0, 0.2), 0 5px 5px 0 rgba(0, 0, 0, 0.24);
+}
+.card-content{
+    display: table;
+    width: 100%;
+    height: 70px;
+    padding: 0;
+}
+.group-title{
+    display: table-cell;
+    text-align: center;
+    vertical-align: middle;
+    font-size: 20px;
+    font-family: '나눔고딕';
+    font-weight: 700;
+    color: gray;
+}
+.group-img{
+    width: 100%;
+}
+
+.card-background:hover{
+    cursor: pointer;
+    opacity: 0.5;
+}

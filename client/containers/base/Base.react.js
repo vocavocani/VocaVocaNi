@@ -8,6 +8,8 @@ import { logout } from '../../actions/userAction'
 
 import Header from '../../components/header/Header.react';
 
+import './Base.css';
+
 class Base extends React.Component {
 
   componentWillMount() {
@@ -29,7 +31,7 @@ class Base extends React.Component {
             user_data={this.props.auth.user_data}
             _logout={() => this.props.dispatch(logout())}
           />
-          <div className="container">
+          <div className="container base">
             {this.props.children}
           </div>
         </div>
