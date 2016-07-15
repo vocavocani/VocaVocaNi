@@ -6,7 +6,6 @@
 const userModel = require('../models/userModel');
 const my_conf = require('../my_config');
 const utils = require('../utils');
-const async = require('async');
 
 /*******************
  *  Register
