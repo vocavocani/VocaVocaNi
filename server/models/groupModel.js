@@ -6,7 +6,6 @@
 const mysql = require('mysql');
 const db_config = require('./db_config');
 const utils = require('../utils');
-const async = require('async');
 
 const pool = mysql.createPool(db_config);
 
@@ -23,59 +22,57 @@ exports.groupCreate = (group_data, done) => {
         if(err){
           done(err);
         }else{
-          async.waterfall([
-              (callback) => {  // Group Create
-                const sql = "INSERT INTO vvn_group SET ?";
+          new Promise((resolve, reject) => {
+              const sql = "INSERT INTO vvn_group SET ?";
 
-                conn.query(sql, group_data, (err, rows) => {
-                  if(err){
-                    callback(err);
+              conn.query(sql, group_data, (err, rows) => {
+                if(err){
+                  reject(err);
+                }else{
+                  if(rows.affectedRows == 1){
+                    resolve(rows.insertId);  // rows.insertId = create group idx
                   }else{
-                    if(rows.affectedRows == 1){
-                      callback(null, rows.insertId);  // rows.insertId = create group idx
-                    }else{
-                      const _err = new Error("Group Create Custom Error(insert vvn_group)");
-                      callback(_err);
-                    }
+                    const _err = new Error("Group Create Custom Error(insert vvn_group)");
+                    reject(_err);
                   }
-                });
-              },
-              (group_id, callback) => {  // vvn_group_user insert data
+                }
+              });
+            }
+          ).then((group_id) => {
+              return new Promise((resolve, reject) => {
                 const sql = "INSERT INTO vvn_group_user(group_idx, user_idx, group_user_confirm) VALUES (?,?,?)";
 
                 conn.query(sql, [group_id, group_data.user_idx, 1], (err, rows) => {
                   if(err){
-                    callback(err);
+                    reject(err);
                   }else{
                     if(rows.affectedRows == 1){
-                      callback(null);
+                      resolve(null);
                     }else{
                       const _err = new Error("Group Create Custom Error(insert vvn_group_user)");
-                      callback(_err);
+                      reject(_err);
                     }
                   }
                 });
-              }
-            ],
-            (err) => {
-              if(err){
-                conn.rollback(() => {
+              });
+            }
+          ).then(() => {
+              conn.commit((err) => {
+                if(err){
                   done(err);
                   conn.release();
-                });
-              }else{
-                conn.commit((err) => {
-                  if(err){
-                    done(err);
-                    conn.release();
-                  }else{
-                    done(null);
-                    conn.release();
-                  }
-                });
-              }
+                }else{
+                  done(null);
+                  conn.release();
+                }
+              });
             }
-          );  // waterfall
+          ).catch((err) => {
+            conn.rollback(() => {
+              done(err);
+              conn.release();
+            });
+          });  // Promise
         }
       });  // beginTransaction
     }
