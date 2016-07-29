@@ -3,17 +3,20 @@
  */
 import React, { PropTypes } from 'react';
 import ReactDom from 'react-dom';
+import { Link } from 'react-router';
 import { connect } from 'react-redux';
 
-import GroupCreateCard from '../../../components/group/GroupCreateCard.react';
+import GroupCreateCard from '../../components/group/GroupCreateCard.react.js';
 
-import './GroupList.css';
+import './Group.css';
 
 class GroupList extends React.Component {
   render() {
     return (
       <div className="row card-list">
-        <GroupCreateCard/>
+        <Link to="/group/create">
+          <GroupCreateCard/>
+        </Link>
       </div>
     )
   }

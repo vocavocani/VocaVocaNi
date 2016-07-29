@@ -1,3 +1,4 @@
+/* 그룹 리스트 */
 .card-list{
     text-align: center;
 }
@@ -30,8 +31,17 @@
 .group-img{
     width: 100%;
 }
-
 .card-background:hover{
     cursor: pointer;
     opacity: 0.5;
+}
+
+/* 그룹 만들기 페이지 */
+.group-create-page{
+    text-align: center;
+}
+.group-create-title{
+    font-size: 2em;
+    font-family: '나눔고딕';
+    font-weight: 700;
 }
